@@ -1,28 +1,26 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { PhoneBookForm } from './phonebook/PhoneBookForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
 import css from './styleMain/styleMaine.module.css';
 
-export class App extends Component {
-  state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-      { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-      { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
-      { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
-    ],
-    filter: '',
-  };
+export function App() {
+  const [contacts, setContacts] = useState([
+    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+  ]);
 
-  handlerChenge = event => {
-    const { name, value } = event.currentTarget;
-    this.setState({ [name]: value });
-  };
+  const [filter, setFilter] = useState('');
 
-  addToContact = (contactsData, contactName, clearForm) => {
-    const unicContactSearch = this.state.contacts.some(
+  const handleFilterChenge = event => {
+    const { value } = event.currentTarget;
+    setFilter(value);
+  };
+  console.log(contacts);
+
+  const addToContact = (contactsData, contactName, clearForm) => {
+    const unicContactSearch = contacts.some(
       contact => contact.name === contactName
     );
 
@@ -30,59 +28,43 @@ export class App extends Component {
       alert(`${contactName} is already in contacts`);
       return;
     }
-
-    this.setState(prevState => {
-      return {
-        contacts: [...prevState.contacts, contactsData],
-        filter: '',
-      };
-    });
+    setContacts([...contacts, contactsData]);
+    setFilter('');
 
     clearForm();
   };
 
-  deleteContact = updatedContacts => {
-    this.setState({ contacts: updatedContacts });
+  const deleteContact = contactId => {
+    const updatedContacts = contacts.filter(
+      contact => contact.id !== contactId
+    );
+    setContacts(updatedContacts);
   };
 
-  componentDidMount() {
+  useEffect(() => {
     const contactsFromLocalStotage = localStorage.getItem('contacts');
     const parsedContacts = JSON.parse(contactsFromLocalStotage);
     if (parsedContacts) {
-      this.setState({ contacts: parsedContacts });
+      setContacts(parsedContacts);
     }
+  }, []);
 
-    console.log(parsedContacts);
-  }
+  useEffect(() => {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+  }, [contacts]);
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.contacts !== prevState) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-    console.log(prevState);
-    console.log(this.state);
-  }
-
-  render() {
-    const filterValue = this.state.filter;
-    return (
-      <div className={css.conteiner}>
-        <h3 className={css.title}>Phone book</h3>
-        <PhoneBookForm
-          state={this.state}
-          handlerChenge={this.handlerChenge}
-          handlerSubmit={this.handlerSubmit}
-          addToContact={this.addToContact}
-        />
-        <h4 className={css.titleSecond}>Find Contact</h4>
-        <Filter handlerChenge={this.handlerChenge} filterValue={filterValue} />
-        <h4 className={css.titleSecond}>Contacts</h4>
-        <ContactList
-          state={this.state}
-          deleteContact={this.deleteContact}
-        ></ContactList>
-      </div>
-    );
-  }
+  return (
+    <div className={css.conteiner}>
+      <h3 className={css.title}>Phone book</h3>
+      <PhoneBookForm props={contacts} addToContact={addToContact} />
+      <h4 className={css.titleSecond}>Find Contact</h4>
+      <Filter handleFilterChenge={handleFilterChenge} filterValue={filter} />
+      <h4 className={css.titleSecond}>Contacts</h4>
+      <ContactList
+        contacts={contacts}
+        filter={filter}
+        deleteContact={deleteContact}
+      ></ContactList>
+    </div>
+  );
 }
-// }
