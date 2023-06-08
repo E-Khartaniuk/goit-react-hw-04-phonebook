@@ -1,9 +1,17 @@
 import React from 'react';
 import css from './ContactListItem.module.css';
 
-export default function ContactListItem({ contact, deleteContact }) {
+import { useDispatch } from 'react-redux';
+
+export default function ContactListItem({ contact }) {
+  const dispatch = useDispatch();
+
   const findIdToDeleteContact = () => {
-    deleteContact(contact.id);
+    dispatch({
+      type: 'contact/deleteContact',
+      payload: contact.id,
+    });
+    // deleteContact(contact.id);
   };
 
   const name = contact.name;

@@ -2,25 +2,24 @@ import ContactListItem from 'components/ContactListItem/ContactListItem';
 import React from 'react';
 import css from './ContactList.module.css';
 
-export default function ContactList({ contacts, filter, deleteContact }) {
-  const filterContactList = contactId => {
-    deleteContact(contactId);
-  };
+import { useSelector } from 'react-redux';
+
+export default function ContactList() {
+  const contacts = useSelector(state => state.contacts);
+  const filterValue = useSelector(state => state.filter);
 
   return (
     <div className="contactList">
       <ul className={css.contactList}>
         {contacts
           .filter(contact => {
-            return contact.name.toLowerCase().includes(filter);
+            return contact.name.toLowerCase().includes(filterValue);
           })
           .map(contact => {
             return (
               <ContactListItem
-                allContact={contacts}
                 contact={contact}
                 key={contact.id}
-                deleteContact={filterContactList}
               ></ContactListItem>
             );
           })}

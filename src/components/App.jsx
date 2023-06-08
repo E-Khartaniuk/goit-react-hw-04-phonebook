@@ -1,70 +1,59 @@
 import React, { useState, useEffect } from 'react';
 
+// import { configureStore } from '@reduxjs/toolkit';
+// import { useSelector } from 'react-redux';
+
 import { PhoneBookForm } from './phonebook/PhoneBookForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
 import css from './styleMain/styleMaine.module.css';
+import { useDispatch, useSelector } from 'react-redux';
 
 export function App() {
-  const [contacts, setContacts] = useState([
-    { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
-    { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
-  ]);
+  // const [contacts, setContacts] = useState([
+  //   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
+  //   { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
+  // ]);
 
-  const [filter, setFilter] = useState('');
+  // const addToContact = (contactsData, contactName, clearForm) => {
+  //   const unicContactSearch = contacts.some(
+  //     contact => contact.name === contactName
+  //   );
 
-  const handleFilterChenge = event => {
-    const { value } = event.currentTarget;
-    setFilter(value);
-  };
-  console.log(contacts);
+  //   if (unicContactSearch) {
+  //     alert(`${contactName} is already in contacts`);
+  //     return;
+  //   }
+  //   setContacts([...contacts, contactsData]);
+  //   // setFilter('');
 
-  const addToContact = (contactsData, contactName, clearForm) => {
-    const unicContactSearch = contacts.some(
-      contact => contact.name === contactName
-    );
+  //   clearForm();
+  // };
 
-    if (unicContactSearch) {
-      alert(`${contactName} is already in contacts`);
-      return;
-    }
-    setContacts([...contacts, contactsData]);
-    setFilter('');
+  // const dispatch = useDispatch();
+  // const contacts = useSelector(state => state.contacts);
 
-    clearForm();
-  };
+  // useEffect(() => {
+  //   const contactsFromLS = localStorage.getItem('contacts');
+  //   const parsedContacts = JSON.parse(contactsFromLS);
+  //   if (parsedContacts.length !== 0) {
+  //     console.log('parsedContacts', parsedContacts);
+  //     dispatch({ type: 'contact/addLSContact', payload: parsedContacts });
+  //   }
+  // }, []);
 
-  const deleteContact = contactId => {
-    const updatedContacts = contacts.filter(
-      contact => contact.id !== contactId
-    );
-    setContacts(updatedContacts);
-  };
-
-  useEffect(() => {
-    const contactsFromLocalStotage = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contactsFromLocalStotage);
-    if (parsedContacts) {
-      setContacts(parsedContacts);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
+  // useEffect(() => {
+  //   localStorage.setItem('contacts', JSON.stringify(contacts));
+  // }, [contacts]);
 
   return (
     <div className={css.conteiner}>
       <h3 className={css.title}>Phone book</h3>
-      <PhoneBookForm props={contacts} addToContact={addToContact} />
+      <PhoneBookForm />
       <h4 className={css.titleSecond}>Find Contact</h4>
-      <Filter handleFilterChenge={handleFilterChenge} filterValue={filter} />
+      <Filter />
       <h4 className={css.titleSecond}>Contacts</h4>
-      <ContactList
-        contacts={contacts}
-        filter={filter}
-        deleteContact={deleteContact}
-      ></ContactList>
+      <ContactList></ContactList>
     </div>
   );
 }
