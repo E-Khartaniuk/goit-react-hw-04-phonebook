@@ -6,7 +6,7 @@ const initialState = {
     { id: 'id-1', name: 'Rosie Simpson', number: '111-12-56' },
     { id: 'id-2', name: 'Hermione Kline', number: '222-89-12' },
     { id: 'id-3', name: 'Hermione Kline', number: '333-89-12' },
-    { id: 'id-4', name: 'Hermione Kline', number: '444-89-12' },
+       { id: 'id-4', name: 'Hermione Kline', number: '444-89-12' },
     { id: 'id-5', name: 'Hermione Kline', number: '555-89-12' },
   ],
   filter: '',
